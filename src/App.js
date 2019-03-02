@@ -1,26 +1,61 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import classes from './App.module.css';
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      todo: {
+        text: ''
+      },
+      todos: [
+        {
+          text: 'Learn React',
+          isCompleted: false
+        },
+        {
+          text: 'Buy Booster',
+          isCompleted: false
+        },
+        {
+          text: 'Run',
+          isCompleted: false
+        }
+      ]
+    };
+  }
+
+  onChangeHandler = e => {
+    this.setState({ todo: { text: e.target.value, isCompleted: false } });
+  };
+
+  addTodo = e => {
+    if (e.key === 'Enter') {
+      this.state.todos.push(this.state.todo);
+      this.setState({ todo: { text: '' } });
+    }
+  };
+
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
+      <>
+        <div className={classes.App}>
+          <input
+            id={classes.todoInput}
+            value={this.state.todo.text}
+            onChange={this.onChangeHandler}
+            onKeyPress={this.addTodo}
+          />
+          <div className={classes.todoContaioner}>
+            <ul className={classes.todoList}>
+              {this.state.todos.map((item, idx) => {
+                return <li key={idx}>{item.text}</li>;
+              })}
+            </ul>
+          </div>
+        </div>
+        {/* <pre>{JSON.stringify(this.state, null, 2)}</pre> */}
+      </>
     );
   }
 }
